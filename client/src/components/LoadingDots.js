@@ -2,8 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 
 const StyledLoadingDots = styled.div`
-  margin: 100px auto 0;
+  margin: 50px auto 0;
   text-align: center;
+  span {
+    display: inline-block;
+    color: #34495e;
+    margin-bottom: 8px;
+  }
   div {
     width: 18px;
     height: 18px;
@@ -11,8 +16,8 @@ const StyledLoadingDots = styled.div`
     background-color: #34495e;
     border-radius: 100%;
     display: inline-block;
-    -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
-    animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+    -webkit-animation: sk-bouncedelay 1.4s infinite ease both;
+    animation: sk-bouncedelay 1.4s infinite ease both;
   }
   .bounce1 {
     -webkit-animation-delay: -0.32s;
@@ -23,23 +28,24 @@ const StyledLoadingDots = styled.div`
     animation-delay: -0.16s;
   }
   @-webkit-keyframes sk-bouncedelay {
-    0%, 80%, 100% { -webkit-transform: scale(0) }
-    40% { -webkit-transform: scale(1.0) }
+    0%, 100% { -webkit-transform: scale(0) }
+    50% { -webkit-transform: scale(1.0) }
   }
   @keyframes sk-bouncedelay {
-    0%, 80%, 100% {
+    0%, 100% {
       -webkit-transform: scale(0);
       transform: scale(0);
-    } 40% {
+    } 50% {
       -webkit-transform: scale(1.0);
       transform: scale(1.0);
     }
   }
 `
 
-const LoadingDots = () => {
+const LoadingDots = props => {
   return(
     <StyledLoadingDots>
+      <span><i>{props.text}</i></span> <br />
       <div className="bounce1"></div>
       <div className="bounce2"></div>
       <div className="bounce3"></div>

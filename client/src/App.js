@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import socketIOClient from 'socket.io-client';
 import styled from 'styled-components';
 import LoadingDots from './components/LoadingDots';
-import InputAndSubmitField from './components/InputAndSubmitField';
+import InputAndSubmit from './components/InputAndSubmit';
 import UserTagList from './components/UserTagList';
+import SideBar from './components/SideBar';
+import Content from './components/Content';
+import SplashPage from './components/SplashPage';
 
 const socket = socketIOClient('http://127.0.0.1:4000');
 
-
-
 const StyledWrapper = styled.div`
+	display: flex;
 	font-family: "Geneva";
 	color: white
 	min-height: 100vh;
@@ -25,7 +27,9 @@ class App extends Component {
 		location: {},
 		loading: true,
 		userSubmitted: false,
-		userList: []
+		userList: [],
+		newRoomName: '',
+		rooms: []
 	};
 
 	componentDidMount() {
@@ -47,10 +51,6 @@ class App extends Component {
 			    messages: [...previousState.messages, msg]
 			}));
 		});
-	}
-
-	setName = e => {
-		this.setState({ name: e.target.value })
 	}
 
 	submitUser = async e => {
@@ -82,25 +82,50 @@ class App extends Component {
 		}
 	}
 
-	joinRoom = id => {
-		socket.emit('join room', id)
+	setName = e => {
+		this.setState({ name: e.target.value })
+	}
+
+	setNewRoomName = e => {
+		this.setState({ newRoomName: e.target.value })
+	}
+
+	joinRoom = e => {
+		e.preventDefault();
+		socket.emit('join room', this.state.newRoomName)
+		this.setState(previousState => ({
+			newRoomName: '',
+			rooms: [...previousState.rooms, previousState.newRoomName]
+		}))
 	}
 
   render() {
-		const { loading, userSubmitted, userList } = this.state;
+		const { loading, userSubmitted, userList, newRoomName, rooms } = this.state;
     return (
 			<StyledWrapper>
-				{loading && <LoadingDots />}
-				{(!loading && !userSubmitted) &&
-					<InputAndSubmitField
-						placeholder="Enter your name"
-						onChange={this.setName}
-						onClick={this.submitUser}
-					/>}
-				{userSubmitted && <UserTagList userList={userList} />}
-				<InputAndSubmitField
-					placeholder="Write a message..."
-				/>
+				<SideBar>
+					{loading && <LoadingDots text="Finding location" />}
+					{(!loading && !userSubmitted) &&
+						<InputAndSubmit
+							placeholder="Enter your name"
+							buttonText="Send"
+							onChange={this.setName}
+							onClick={this.submitUser}
+						/>}
+					{userSubmitted && <UserTagList userList={userList} />}
+				</SideBar>
+				<Content>
+					{rooms.length < 1 ?
+						<SplashPage onChange={this.setNewRoomName} onClick={this.joinRoom} /> :
+						<>
+							<div>p</div>
+							<InputAndSubmit
+								placeholder="Write a message..."
+								buttonText="Send"
+							/>
+						</>
+					}
+				</Content>
 			</StyledWrapper>
 		)
   }

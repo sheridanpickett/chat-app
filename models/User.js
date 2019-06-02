@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
 	name: String,
 	socketID: String,
-	loc: {
+	location: {
     type: {
       type: String,
     },
@@ -13,6 +13,6 @@ const userSchema = new mongoose.Schema({
   }
 })
 
-userSchema.index({ loc: "2dsphere" });
+userSchema.index({ location: "2dsphere" });
 
 module.exports = mongoose.model('User', userSchema);

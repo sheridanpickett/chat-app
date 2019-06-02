@@ -1,28 +1,31 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const StyledInputAndSubmitField = styled.form`
+const StyledInputAndSubmit = styled.form`
   display: flex;
+  justify-content: space-between;
   height: 50px;
-  width: 270px;
-  margin: 5px;
-  border-radius: 5px;
-  box-shadow: 1px 2px black;
+  margin: 8px;
+  border-radius: 4px;
   overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.06), 0 1px 1px rgba(255,255,255,0.2);
   input {
-    border: none;
-    height: 100%
-    width: 200px;
+    width: 100%;
     padding: 0 10px;
     font-size: 1em;
+    background-color: rgba(255,255,255,.5);
+    border-radius: 4px 0px 0px 4px;
+    border: 1px solid rgba(0,0,0,0.16);
+    border-right: none;
   }
   button {
     display: flex;
 		height: 100%;
     width: 70px;
 		background-color: #34495e;
-    border: none;
-    font-size: 1em;
+    border: 1px solid #34495e;
+    font-size: .9em;
+    border-radius: 0px 4px 4px 0px;
     :hover {
       background-color: #425ff4;
     }
@@ -38,15 +41,15 @@ const StyledInputAndSubmitField = styled.form`
   }
 `
 
-const InputAndSubmitField = props => {
+const InputAndSubmit = props => {
   return(
-    <StyledInputAndSubmitField>
+    <StyledInputAndSubmit>
       <input type="text" placeholder={props.placeholder} onChange={props.onChange} />
       <button onClick={props.onClick} >
-        <span>Send</span>
+        <span>{props.buttonText}</span>
       </button>
-    </StyledInputAndSubmitField>
+    </StyledInputAndSubmit>
   )
 }
 
-export default InputAndSubmitField;
+export default InputAndSubmit;

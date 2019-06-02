@@ -18,12 +18,12 @@ app.post('/createUser', async (req, res) => {
 		const user = new User({
 			name: req.body.name,
 			socketID: req.body.socketID,
-			loc: req.body.location
+			location: req.body.location
 		})
 		await user.save();
 	  let userList = await User.find(
 		{
-	  	loc: {
+	  	location: {
 	    	$nearSphere: {
 	      	$geometry: req.body.location,
 		      $minDistance: 0,
@@ -42,6 +42,7 @@ app.post('/test', async (req, res) => {
 })
 
 io.on('connection', socket => {
+	console.log('user connected')
 	socket.on('join room', room => {
 		socket.join(room)
 		console.log('joined room' + room)
@@ -49,10 +50,15 @@ io.on('connection', socket => {
 			console.log(msg);
 	    io.in(room).emit('chat message', msg);
 	  });
-		socket.on('disconnect', () => {
-	    console.log('user disconnected');
-	  });
 	})
+	socket.on('disconnect', async () => {
+		try {
+			let result = await User.deleteOne({socketID: socket.id})
+			console.log(result)
+		} catch(err) {
+			console.log(err)
+		}
+	});
 })
 
 // const nsp = io.of('/my-namespace');
