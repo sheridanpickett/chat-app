@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import socketIOClient from 'socket.io-client';
+import SocketContext from './socket-context';
 import styled from 'styled-components';
 import LoadingDots from './components/LoadingDots';
 import InputAndSubmit from './components/InputAndSubmit';
@@ -7,6 +8,7 @@ import UserTagList from './components/UserTagList';
 import SideBar from './components/SideBar';
 import Main from './components/Main';
 import SplashPage from './components/SplashPage';
+import TabBarContainer from './components/TabBarContainer';
 
 const socket = socketIOClient('http://127.0.0.1:4000');
 
@@ -28,7 +30,7 @@ class App extends Component {
 		userSubmitted: false,
 		userList: [],
 		newRoomName: '',
-		rooms: []
+		rooms: ['room1', 'room2', 'room3']
 	};
 
 	componentDidMount() {
@@ -117,21 +119,21 @@ class App extends Component {
   render() {
 		const { loading, userSubmitted, name, message, messages, userList, room, rooms, newRoomName } = this.state;
     return (
-			<StyledWrapper>
-				<SideBar>
-					{loading && <LoadingDots text="Finding location" />}
-					{(!loading && !userSubmitted) &&
-						<InputAndSubmit
-							placeholder="Enter your name"
-							value={name}
-							buttonText="Send"
-							onChange={this.setName}
-							onClick={this.submitUser}
-						/>}
-					{userSubmitted && <UserTagList userList={userList} />}
-				</SideBar>
-				<Main />
- 			</StyledWrapper>
+			<SocketContext.Provider value={socket}>
+				<StyledWrapper>
+					<SideBar>
+						{loading && <LoadingDots text="Finding location" />}
+						{(!loading && !userSubmitted) &&
+							<InputAndSubmit
+								placeholder="Enter your name"
+								buttonText="Send"
+								onClick={this.submitUser}
+							/>}
+						{userSubmitted && <UserTagList userList={userList} />}
+					</SideBar>
+					<TabBarContainer />
+				</StyledWrapper>
+			</SocketContext.Provider>
 		)
   }
 }

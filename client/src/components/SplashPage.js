@@ -18,7 +18,7 @@ const StyledSplashPage = styled.div`
   }
 `
 
-const SplashPage = props => {
+const SplashPage = ({ onClick }) => {
   return (
     <StyledSplashPage>
       <div>
@@ -29,8 +29,7 @@ const SplashPage = props => {
         <InputAndSubmit
           placeholder="Enter a room name"
           buttonText="Join"
-          onChange={props.onChange}
-          onClick={props.onClick}
+          onClick={onClick}
         />
       </div>
     </StyledSplashPage>

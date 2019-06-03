@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { updateName } from '../actions';
 
 const StyledInputAndSubmit = styled.form`
   display: flex;
@@ -19,7 +20,6 @@ const StyledInputAndSubmit = styled.form`
     border-right: none;
   }
   button {
-    display: flex;
 		height: 100%;
     width: 70px;
 		background-color: #34495e;
@@ -41,15 +41,26 @@ const StyledInputAndSubmit = styled.form`
   }
 `
 
-const InputAndSubmit = props => {
-  return(
-    <StyledInputAndSubmit>
-      <input type="text" placeholder={props.placeholder} value={props.value} onChange={props.onChange} />
-      <button onClick={props.onClick} >
-        <span>{props.buttonText}</span>
-      </button>
-    </StyledInputAndSubmit>
-  )
+class InputAndSubmit extends React.Component {
+
+  state = {
+    value: ''
+  }
+
+  setValue = e => {
+    this.setState({ value: e.target.value })
+  }
+
+  render() {
+    return (
+      <StyledInputAndSubmit>
+        <input type="text" placeholder={this.props.placeholder} value={this.state.value} onChange={this.setValue} />
+        <button onClick={this.props.onClick} >
+          <span>{this.props.buttonText}</span>
+        </button>
+      </StyledInputAndSubmit>
+    )
+  }
 }
 
 export default InputAndSubmit;
