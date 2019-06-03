@@ -5,7 +5,7 @@ import LoadingDots from './components/LoadingDots';
 import InputAndSubmit from './components/InputAndSubmit';
 import UserTagList from './components/UserTagList';
 import SideBar from './components/SideBar';
-import Content from './components/Content';
+import Main from './components/Main';
 import SplashPage from './components/SplashPage';
 
 const socket = socketIOClient('http://127.0.0.1:4000');
@@ -13,7 +13,6 @@ const socket = socketIOClient('http://127.0.0.1:4000');
 const StyledWrapper = styled.div`
 	display: flex;
 	font-family: "Geneva";
-	color: white
 	min-height: 100vh;
 	min-width: 100vw;
 `
@@ -46,10 +45,10 @@ class App extends Component {
 		socket.on('connect', () => {
 			this.setState({socketID: socket.id});
 		})
-		socket.on('chat message', msg => {
-			this.setState(previousState => ({
-			    messages: [...previousState.messages, msg]
-			}));
+		socket.on('chat message', (room, msg) => {
+			this.setState(prevState => ({
+
+			}))
 		});
 	}
 
@@ -82,6 +81,27 @@ class App extends Component {
 		}
 	}
 
+	joinRoom = e => {
+		e.preventDefault();
+		const room = this.state.newRoomName;
+		if(room) {
+			socket.emit('join room', room);
+			this.setState(prevState => ({
+						rooms: [...prevState.rooms, room],
+						newRoomName: ''
+				})
+			)
+		}
+	}
+
+	sendMessage = e => {
+		e.preventDefault();
+		if (this.state.message) {
+			socket.emit('chat message', this.state.room, this.state.message);
+			this.setState({message: ""});
+		}
+	}
+
 	setName = e => {
 		this.setState({ name: e.target.value })
 	}
@@ -90,17 +110,12 @@ class App extends Component {
 		this.setState({ newRoomName: e.target.value })
 	}
 
-	joinRoom = e => {
-		e.preventDefault();
-		socket.emit('join room', this.state.newRoomName)
-		this.setState(previousState => ({
-			newRoomName: '',
-			rooms: [...previousState.rooms, previousState.newRoomName]
-		}))
+	setMessage = e => {
+		this.setState({message: e.target.value})
 	}
 
   render() {
-		const { loading, userSubmitted, userList, newRoomName, rooms } = this.state;
+		const { loading, userSubmitted, name, message, messages, userList, room, rooms, newRoomName } = this.state;
     return (
 			<StyledWrapper>
 				<SideBar>
@@ -108,25 +123,15 @@ class App extends Component {
 					{(!loading && !userSubmitted) &&
 						<InputAndSubmit
 							placeholder="Enter your name"
+							value={name}
 							buttonText="Send"
 							onChange={this.setName}
 							onClick={this.submitUser}
 						/>}
 					{userSubmitted && <UserTagList userList={userList} />}
 				</SideBar>
-				<Content>
-					{rooms.length < 1 ?
-						<SplashPage onChange={this.setNewRoomName} onClick={this.joinRoom} /> :
-						<>
-							<div>p</div>
-							<InputAndSubmit
-								placeholder="Write a message..."
-								buttonText="Send"
-							/>
-						</>
-					}
-				</Content>
-			</StyledWrapper>
+				<Main />
+ 			</StyledWrapper>
 		)
   }
 }

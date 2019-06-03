@@ -44,7 +44,7 @@ const StyledInputAndSubmit = styled.form`
 const InputAndSubmit = props => {
   return(
     <StyledInputAndSubmit>
-      <input type="text" placeholder={props.placeholder} onChange={props.onChange} />
+      <input type="text" placeholder={props.placeholder} value={props.value} onChange={props.onChange} />
       <button onClick={props.onClick} >
         <span>{props.buttonText}</span>
       </button>

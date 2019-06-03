@@ -11,8 +11,6 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
-app.get('/', (req, res) => res.send('hello'));
-
 app.post('/createUser', async (req, res) => {
 	try {
 		const user = new User({
@@ -38,23 +36,20 @@ app.post('/createUser', async (req, res) => {
 })
 
 app.post('/test', async (req, res) => {
-	console.log(req.body)
 })
 
+
 io.on('connection', socket => {
-	console.log('user connected')
 	socket.on('join room', room => {
 		socket.join(room)
-		console.log('joined room' + room)
-		socket.on('chat message', msg => {
-			console.log(msg);
-	    io.in(room).emit('chat message', msg);
+		//io.in(room).clients((err, clients) => {console.log(clients)})
+		socket.on('chat message', (room, msg) => {
+	    io.in(room).emit('chat message', room, msg);
 	  });
 	})
 	socket.on('disconnect', async () => {
 		try {
 			let result = await User.deleteOne({socketID: socket.id})
-			console.log(result)
 		} catch(err) {
 			console.log(err)
 		}
