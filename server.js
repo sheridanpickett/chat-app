@@ -40,12 +40,14 @@ app.post('/test', async (req, res) => {
 
 
 io.on('connection', socket => {
+	socket.on('chat message', (room, msg) => {
+		console.log(msg);
+		io.emit('chat message', room, msg);
+	});
 	socket.on('join room', room => {
 		socket.join(room)
+		console.log(socket.id + ' joined room ' + room)
 		//io.in(room).clients((err, clients) => {console.log(clients)})
-		socket.on('chat message', (room, msg) => {
-	    io.in(room).emit('chat message', room, msg);
-	  });
 	})
 	socket.on('disconnect', async () => {
 		try {

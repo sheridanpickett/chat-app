@@ -1,44 +1,56 @@
 import React from 'react';
-import Tab from './Tab';
 import styled from 'styled-components';
+import { generate } from 'shortid';
+import Tab from './Tab';
+import TabNew from './TabNew';
 
 const StyledTabBar = styled.div`
   display: flex;
   height: 60px;
 `
 
-const TabBar = ({rooms, activeRoom, updateActiveRoom, deleteRoom}) => {
+const TabBar = ({rooms, activeRoom, updateActiveRoom, addRoom, deleteRoom}) => {
+
+  const roomTabs = rooms.map((room, index) => {
+      return (
+        <Tab
+          key={generate()}
+          room={room}
+          isActive={index===activeRoom}
+          deleteAndUpdate={()=>deleteAndUpdate(index, rooms, activeRoom)}
+          update={()=>updateActiveRoom(index)}
+        />
+      )})
 
   const deleteAndUpdate = (index, rooms, activeRoom) => {
-    if(index == activeRoom.index) {
-      if(rooms.length == 1) {
-        updateActiveRoom('', '')
-      } else if(index == rooms.length-1) {
-        updateActiveRoom(rooms[index-1], index-1)
+    if(index===activeRoom) {
+      if(rooms.length===1) {
+        updateActiveRoom(null)
+      } else if(index===rooms.length-1) {
+        updateActiveRoom(index-1)
       } else {
-        updateActiveRoom(rooms[index+1], index)
+        updateActiveRoom(index)
       }
       deleteRoom(index);
     } else {
-      if(index < activeRoom.index){
-        updateActiveRoom(activeRoom.room, activeRoom.index-1)
+      if(index < activeRoom){
+        updateActiveRoom(activeRoom-1)
       }
       deleteRoom(index);
     }
   }
 
-  const roomTabs = rooms.map((room, index) => {
-      return (
-        <Tab
-          room={room}
-          isActive={index==activeRoom.index}
-          deleteAndUpdate={()=>deleteAndUpdate(index, rooms, activeRoom)}
-          update={()=>updateActiveRoom(room, index)}
-        />
-      )
-    }
+  return(
+    <StyledTabBar>
+      {roomTabs}
+      <TabNew
+        newTab={()=>{
+          addRoom();
+          updateActiveRoom(rooms.length)
+        }}
+      />
+    </StyledTabBar>
   )
-  return <StyledTabBar>{roomTabs}</StyledTabBar>
 }
 
 export default TabBar;
