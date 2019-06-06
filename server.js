@@ -38,16 +38,13 @@ app.post('/createUser', async (req, res) => {
 app.post('/test', async (req, res) => {
 })
 
-
 io.on('connection', socket => {
-	socket.on('chat message', (room, msg) => {
-		console.log(msg);
-		io.emit('chat message', room, msg);
+	socket.on('chat message', (room, msg, user) => {
+		io.emit('chat message', room, msg, user);
+		console.log(room, msg, user)
 	});
 	socket.on('join room', room => {
 		socket.join(room)
-		console.log(socket.id + ' joined room ' + room)
-		//io.in(room).clients((err, clients) => {console.log(clients)})
 	})
 	socket.on('disconnect', async () => {
 		try {

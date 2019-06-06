@@ -2,9 +2,9 @@ import React from 'react';
 import socket from '../connectSocket';
 import InputAndSubmit from './InputAndSubmit';
 
-const SendMessage = ({room}) => {
+const SendMessage = ({room, user}) => {
   const sendMessage = msg => {
-    socket.emit('chat message', room, msg)
+    socket.emit('chat message', room, msg, user)
   }
   return (
     <div>

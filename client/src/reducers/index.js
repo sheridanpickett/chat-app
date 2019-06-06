@@ -1,5 +1,8 @@
 const initialState = {
-  name: 'Sheridan',
+  user: {
+    name: '',
+    id: ''
+  },
   rooms: [],
   activeRoom: null,
   messages: {}
@@ -19,9 +22,9 @@ const updateItem = (array, item, index) => {
 
 const reducer = (state = initialState, action) => {
   switch(action.type) {
-    case 'UPDATE_NAME':
+    case 'UPDATE_USER':
       return Object.assign({}, state, {
-        name: action.name
+        user: action.user
       })
     case 'UPDATE_ACTIVE_ROOM':
       return Object.assign({}, state, {
@@ -52,11 +55,12 @@ const reducer = (state = initialState, action) => {
         rooms: removeItem(state.rooms, action.index)
       })
     case 'ADD_MESSAGE':
+    const { msg, user } = action
       return({
         ...state,
         messages: {
           ...state.messages,
-          [action.room]: [...state.messages[action.room], action.msg]
+          [action.room]: [...state.messages[action.room], {msg, user}]
         }
       })
     default:

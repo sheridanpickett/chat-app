@@ -1,6 +1,6 @@
-export const updateName = name => ({
-  type: 'UPDATE_NAME',
-  name
+export const updateUser = user => ({
+  type: 'UPDATE_USER',
+  user
 })
 
 export const updateActiveRoom = index => ({
@@ -22,8 +22,9 @@ export const deleteRoom = index => ({
   index
 })
 
-export const addMessage = (room, msg) => ({
+export const addMessage = (room, msg, user) => ({
   type: 'ADD_MESSAGE',
   room,
-  msg
+  msg,
+  user
 })
