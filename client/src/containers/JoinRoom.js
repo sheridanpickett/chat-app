@@ -5,6 +5,7 @@ import JoinRoom from '../components/JoinRoom';
 const mapState = state => {
   return {
     rooms: state.rooms,
+    user: state.user
   }
 }
 

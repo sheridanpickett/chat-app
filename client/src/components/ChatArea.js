@@ -5,12 +5,14 @@ import JoinRoom from '../containers/JoinRoom';
 import Messages from '../containers/Messages';
 import SendMessage from '../containers/SendMessage';
 
-const ChatArea = ({rooms, activeRoom}) => {
+const ChatArea = ({inRoom}) => {
 
   return (
     <StyledChatArea>
       <TabBar />
-      {rooms[activeRoom]?<Messages />:<JoinRoom />}
+      {inRoom?
+        <Messages />:
+        <JoinRoom />}
       <SendMessage />
     </StyledChatArea>
   )

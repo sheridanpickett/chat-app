@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { addMessage, updateUser } from '../actions';
+import { addMessage, addUserToRoom, removeUserFromRoom } from '../actions';
 import App from '../App.js';
 
 const mapState = state => {
@@ -13,6 +13,8 @@ const mapState = state => {
 const mapDispatch = dispatch => {
   return {
     addMessage: (room, msg, user) => dispatch(addMessage(room, msg, user)),
+    addUserToRoom: (room, user) => dispatch(addUserToRoom(room, user)),
+    removeUserFromRoom: (room, user) => dispatch(removeUserFromRoom(room, user))
   }
 }
 

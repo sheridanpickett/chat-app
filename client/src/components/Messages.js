@@ -4,7 +4,6 @@ import { generate } from 'shortid';
 const Messages = ({messages, user}) => {
   const displayMessages = messages => {
     return messages.map(message => {
-      console.log(message)
       return (
         <div key={generate()}>
           {message.user.name}: {message.msg}

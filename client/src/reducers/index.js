@@ -5,12 +5,23 @@ const initialState = {
   },
   rooms: [],
   activeRoom: null,
-  messages: {}
+  roomInfo: {
+
+  }
 }
 
 const removeItem = (array, index) => {
-  let newArray = array.slice();
+  const newArray = array.slice();
   newArray.splice(index, 1);
+  return newArray;
+}
+
+const removeItemById = (array, id) => {
+  const newArray = array.slice();
+  const idIndex = array.map((user, index) => {
+    if(user.id===id) {return index}
+  })
+  newArray.splice(idIndex, 1);
   return newArray;
 }
 
@@ -36,8 +47,8 @@ const reducer = (state = initialState, action) => {
         rooms: [...state.rooms, ''],
       })
     case 'UPDATE_ROOM':
-    const room = action.room;
-      if(state.messages[room]) {
+      const room = action.room;
+      if(state.roomInfo[room]) {
         return ({
           ...state,
           rooms: updateItem(state.rooms, room, state.activeRoom),
@@ -46,7 +57,10 @@ const reducer = (state = initialState, action) => {
         return ({
           ...state,
           rooms: updateItem(state.rooms, action.room, state.activeRoom),
-          messages: {...state.messages, [action.room]: []}
+          roomInfo: {...state.roomInfo, [action.room]: {
+            messages: [],
+            users: []
+          }}
         })
       }
     case 'DELETE_ROOM':
@@ -54,13 +68,46 @@ const reducer = (state = initialState, action) => {
         ...state,
         rooms: removeItem(state.rooms, action.index)
       })
-    case 'ADD_MESSAGE':
-    const { msg, user } = action
-      return({
+    case 'DELETE_ROOM_INFO':
+      let {[action.room]: omit, ...rest} = state.roomInfo;
+      return ({
         ...state,
-        messages: {
-          ...state.messages,
-          [action.room]: [...state.messages[action.room], {msg, user}]
+        roomInfo: {
+          ...rest
+        }
+      })
+    case 'ADD_MESSAGE':
+      const { msg, user } = action;
+      return ({
+        ...state,
+        roomInfo: {
+          ...state.roomInfo,
+          [action.room]: {
+            ...state.roomInfo[action.room],
+            messages: [...state.roomInfo[action.room].messages, {msg, user}]
+          }
+        }
+      })
+      case 'ADD_USER_TO_ROOM':
+      return ({
+        ...state,
+        roomInfo: {
+          ...state.roomInfo,
+          [action.room]: {
+            ...state.roomInfo[action.room],
+            users: [...state.roomInfo[action.room].users, action.user]
+          }
+        }
+      })
+      case 'REMOVE_USER_FROM_ROOM':
+      return ({
+        ...state,
+        roomInfo: {
+          ...state.roomInfo,
+          [action.room]: {
+            ...state.roomInfo[action.room],
+            users: removeItemById(state.roomInfo[action.room].users, action.user.id)
+          }
         }
       })
     default:

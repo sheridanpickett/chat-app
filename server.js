@@ -35,18 +35,24 @@ app.post('/createUser', async (req, res) => {
 	}
 })
 
-app.post('/test', async (req, res) => {
-})
-
 io.on('connection', socket => {
 	socket.on('chat message', (room, msg, user) => {
-		io.emit('chat message', room, msg, user);
-		console.log(room, msg, user)
+		io.to(room).emit('chat message', room, msg, user);
 	});
-	socket.on('join room', room => {
-		socket.join(room)
+	socket.on('join room', (room, user) => {
+		socket.join(room);
+		socket.to(room).emit('user joined', room, user)
+	})
+	socket.on('leave room', (room, user) => {
+		socket.leave(room);
+		console.log(user.name + ' left ' + room)
+		socket.to(room).emit('user left', room, user);
+	})
+	socket.on('user joined reply', (room, user, newUser) => {
+		socket.to(`${newUser.id}`).emit('user in room', room, user);
 	})
 	socket.on('disconnect', async () => {
+		console.log('left' + socket.rooms);
 		try {
 			let result = await User.deleteOne({socketID: socket.id})
 		} catch(err) {
@@ -54,17 +60,5 @@ io.on('connection', socket => {
 		}
 	});
 })
-
-// const nsp = io.of('/my-namespace');
-// nsp.on('connection', socket => {
-// 	console.log('A user connected');
-// 	socket.on('chat message', msg => {
-// 		console.log(msg);
-//     nsp.emit('chat message', msg);
-//   });
-// 	socket.on('disconnect', () => {
-//     console.log('user disconnected');
-//   });
-// })
 
 server.listen(4000)

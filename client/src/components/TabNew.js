@@ -8,7 +8,12 @@ const StyledTabNew = styled.div`
   border-right: 1px solid black;
   border-bottom: 1px solid black;
 `
-const TabNew = ({newTab}) => {
+const TabNew = ({rooms, addRoom, updateActiveRoom}) => {
+   const newTab = () => {
+     addRoom();
+     updateActiveRoom(rooms.length)
+   }
+
   return(
     <StyledTabNew onClick={newTab}>
       <span>+</span>
