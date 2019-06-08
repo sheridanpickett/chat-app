@@ -6,7 +6,8 @@ const mapState = state => {
   const title = state.activeRoom===null ? 'Chat App' : state.rooms[state.activeRoom];
   return {
     title,
-    user: state.user
+    user: state.user,
+    rooms: state.rooms
   }
 }
 

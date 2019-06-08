@@ -5,12 +5,18 @@ import SideBar from './components/SideBar';
 import EnterName from './containers/EnterName';
 import ChatArea from './containers/ChatArea';
 
-const App = ({title, user, addMessage, addUserToRoom, removeUserFromRoom}) => {
+const App = ({title, user, rooms, addMessage, addUserToRoom, removeUserFromRoom}) => {
 	useEffect(()=>{
 		title ? document.title = title : document.title = 'Chat App'
 	}, [title])
 
 	useEffect(()=>{
+		socket.on('connect', () => {
+			console.log(socket.id);
+			rooms.forEach(room => {
+				socket.emit('join room', room, user);
+			})
+		})
 		socket.on('chat message', (room, msg, newUser) => {
 		  addMessage(room, msg, newUser)
 		})
@@ -21,12 +27,11 @@ const App = ({title, user, addMessage, addUserToRoom, removeUserFromRoom}) => {
 		socket.on('user in room', (room, newUser) => {
 			addUserToRoom(room, newUser);
 		})
-		socket.on('user left', (room, user) => {
-			removeUserFromRoom(room, user)
-			console.log(user.name + ' left ' + room)
+		socket.on('user left', (room, id) => {
+			removeUserFromRoom(room, id)
 		})
 		return () => socket.removeAllListeners()
-	}, [user])
+	}, [user, rooms])
 
   return (
 		<StyledApp>

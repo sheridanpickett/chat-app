@@ -5,9 +5,7 @@ const initialState = {
   },
   rooms: [],
   activeRoom: null,
-  roomInfo: {
-
-  }
+  roomInfo: {}
 }
 
 const removeItem = (array, index) => {
@@ -88,28 +86,28 @@ const reducer = (state = initialState, action) => {
           }
         }
       })
-      case 'ADD_USER_TO_ROOM':
-      return ({
-        ...state,
-        roomInfo: {
-          ...state.roomInfo,
-          [action.room]: {
-            ...state.roomInfo[action.room],
-            users: [...state.roomInfo[action.room].users, action.user]
-          }
+    case 'ADD_USER_TO_ROOM':
+    return ({
+      ...state,
+      roomInfo: {
+        ...state.roomInfo,
+        [action.room]: {
+          ...state.roomInfo[action.room],
+          users: [...state.roomInfo[action.room].users, action.user]
         }
-      })
-      case 'REMOVE_USER_FROM_ROOM':
-      return ({
-        ...state,
-        roomInfo: {
-          ...state.roomInfo,
-          [action.room]: {
-            ...state.roomInfo[action.room],
-            users: removeItemById(state.roomInfo[action.room].users, action.user.id)
-          }
+      }
+    })
+    case 'REMOVE_USER_FROM_ROOM':
+    return ({
+      ...state,
+      roomInfo: {
+        ...state.roomInfo,
+        [action.room]: {
+          ...state.roomInfo[action.room],
+          users: removeItemById(state.roomInfo[action.room].users, action.id)
         }
-      })
+      }
+    })
     default:
       return state
   }
