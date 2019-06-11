@@ -26,7 +26,6 @@ const Tab = ({index, room, user, rooms, activeRoom, updateActiveRoom, deleteRoom
       if(room!=='') {
         deleteRoomInfo(room);
         socket.emit('leave room', room, user)
-        console.log(room, user);
       }
     }
   }

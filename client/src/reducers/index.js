@@ -18,6 +18,7 @@ const removeItemById = (array, id) => {
   const newArray = array.slice();
   const idIndex = array.map((user, index) => {
     if(user.id===id) {return index}
+    return null
   })
   newArray.splice(idIndex, 1);
   return newArray;
@@ -87,16 +88,21 @@ const reducer = (state = initialState, action) => {
         }
       })
     case 'ADD_USER_TO_ROOM':
-    return ({
-      ...state,
-      roomInfo: {
-        ...state.roomInfo,
-        [action.room]: {
-          ...state.roomInfo[action.room],
-          users: [...state.roomInfo[action.room].users, action.user]
+    const userIds = state.roomInfo[action.room].users.map(user => user.id);
+    if(!userIds.includes(action.user.id)){
+      return ({
+        ...state,
+        roomInfo: {
+          ...state.roomInfo,
+          [action.room]: {
+            ...state.roomInfo[action.room],
+            users: [...state.roomInfo[action.room].users, action.user]
+          }
         }
-      }
-    })
+      })
+    } else {
+      return ({...state})
+    }
     case 'REMOVE_USER_FROM_ROOM':
     return ({
       ...state,

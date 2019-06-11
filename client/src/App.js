@@ -5,18 +5,36 @@ import SideBar from './components/SideBar';
 import EnterName from './containers/EnterName';
 import ChatArea from './containers/ChatArea';
 
-const App = ({title, user, rooms, addMessage, addUserToRoom, removeUserFromRoom}) => {
+const App = ({title, user, rooms, activeRoom, addMessage, addUserToRoom, removeUserFromRoom, updateUser}) => {
 	useEffect(()=>{
 		title ? document.title = title : document.title = 'Chat App'
 	}, [title])
 
 	useEffect(()=>{
-		socket.on('connect', () => {
-			console.log(socket.id);
+		const state = {
+			user: {name: user.name},
+			rooms,
+			activeRoom
+		}
+		try {
+			const serializedState = JSON.stringify(state);
+			localStorage.setItem('state', serializedState)
+		} catch(err) {
+			console.log(err);
+		}
+	}, [user, rooms, activeRoom])
+
+	useEffect(()=>{
+		updateUser({...user, id: socket.id});
+		if(socket.id&&user.name) {
 			rooms.forEach(room => {
-				socket.emit('join room', room, user);
+				console.log('joined room');
+				socket.emit('join room', room, {...user, id: socket.id});
 			})
-		})
+		}
+	}, [socket.id, user.name])
+
+	useEffect(()=>{
 		socket.on('chat message', (room, msg, newUser) => {
 		  addMessage(room, msg, newUser)
 		})
@@ -31,7 +49,7 @@ const App = ({title, user, rooms, addMessage, addUserToRoom, removeUserFromRoom}
 			removeUserFromRoom(room, id)
 		})
 		return () => socket.removeAllListeners()
-	}, [user, rooms])
+	}, [user])
 
   return (
 		<StyledApp>

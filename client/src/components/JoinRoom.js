@@ -9,9 +9,7 @@ const StyledJoinRoom = styled.div`
 
 const JoinRoom = ({rooms, user, addRoom, updateActiveRoom, updateRoom}) => {
   const joinRoom = room => {
-    if(!rooms.includes(room)) {
-      socket.emit('join room', room, user);
-    }
+    socket.emit('join room', room, user);
     if(rooms.length<1) {
       addRoom();
       updateActiveRoom(0);
