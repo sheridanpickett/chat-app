@@ -5,7 +5,7 @@ import JoinRoom from '../containers/JoinRoom';
 import Messages from '../containers/Messages';
 import SendMessage from '../containers/SendMessage';
 
-const ChatArea = ({inRoom}) => {
+export default ({inRoom, activeRoom, rooms}) => {
 
   return (
     <StyledChatArea>
@@ -13,9 +13,7 @@ const ChatArea = ({inRoom}) => {
       {inRoom?
         <Messages />:
         <JoinRoom />}
-      <SendMessage />
+      {rooms[activeRoom]&&<SendMessage />}
     </StyledChatArea>
   )
 }
-
-export default ChatArea;

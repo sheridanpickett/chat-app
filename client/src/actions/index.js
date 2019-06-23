@@ -27,11 +27,15 @@ export const deleteRoomInfo = room => ({
   room
 })
 
-export const addMessage = (room, msg, user) => ({
+export const addMessage = message => ({
   type: 'ADD_MESSAGE',
+  message
+})
+
+export const addMessages = (room, messages) => ({
+  type: 'ADD_MESSAGES',
   room,
-  msg,
-  user
+  messages
 })
 
 export const addUserToRoom = (room, user) => ({
@@ -44,4 +48,16 @@ export const removeUserFromRoom = (room, user) => ({
   type: 'REMOVE_USER_FROM_ROOM',
   room,
   user
+})
+
+export const setRoomLoading = (room, isLoading) => ({
+  type: 'SET_ROOM_LOADING',
+  room,
+  isLoading
+})
+
+export const setRoomNewMessage = (room, newMessage) => ({
+  type: 'SET_ROOM_NEW_MESSAGE',
+  room,
+  newMessage
 })

@@ -1,10 +1,11 @@
-import React from 'react';
+import React,{ useEffect } from 'react';
 import socket from '../connectSocket';
 import StyledTab from '../styles/Tab'
 
-const Tab = ({index, room, user, rooms, activeRoom, updateActiveRoom, deleteRoom, deleteRoomInfo}) => {
+export default ({index, room, user, rooms, activeRoom, newMessage,
+  updateActiveRoom, deleteRoom, deleteRoomInfo, setRoomNewMessage}) => {
 
-  const leaveRoom =  () => {
+  const leaveRoom =  e => {
     if(index===activeRoom) {
       if(rooms.length===1) {
         updateActiveRoom(null);
@@ -28,14 +29,21 @@ const Tab = ({index, room, user, rooms, activeRoom, updateActiveRoom, deleteRoom
         socket.emit('leave room', room, user)
       }
     }
+    e.stopPropagation();
   }
 
+  useEffect(()=>{
+    setRoomNewMessage(rooms[activeRoom], false);
+  },[activeRoom, rooms])
+
   return (
-    <StyledTab isActive={index===activeRoom} >
-      <span onClick={() => updateActiveRoom(index)}>{room? room : 'New Room'}</span>
-      <button onClick={leaveRoom} />
+    <StyledTab onClick={()=> updateActiveRoom(index)}>
+      <span>
+        <button onClick={leaveRoom}>x</button>
+        {newMessage && <span style={{color: 'red'}}>.</span>}
+          </span>
+          <br />
+      <div className={index===activeRoom&&'is-active'}>{room ? room : 'New Room'}</div>
     </StyledTab>
   )
 }
-
-export default Tab;

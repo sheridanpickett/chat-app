@@ -1,17 +1,16 @@
 import React from 'react';
 import InputAndSubmit from './InputAndSubmit';
+import StyledEnterName from '../styles/EnterName';
 
-const EnterName = ({updateUser, user}) => {
+export default ({updateUser, user}) => {
   return (
-    <div>
+    <StyledEnterName>
       Enter your name to get started
       <InputAndSubmit
         placeholder="Enter your name"
         buttonText="Submit"
         onClick={name => updateUser({...user, name})}
       />
-    </div>
+    </StyledEnterName>
   )
 }
-
-export default EnterName

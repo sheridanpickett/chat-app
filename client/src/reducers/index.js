@@ -58,7 +58,8 @@ const reducer = (state = initialState, action) => {
           rooms: updateItem(state.rooms, action.room, state.activeRoom),
           roomInfo: {...state.roomInfo, [action.room]: {
             messages: [],
-            users: []
+            users: [],
+            loading: true
           }}
         })
       }
@@ -76,14 +77,24 @@ const reducer = (state = initialState, action) => {
         }
       })
     case 'ADD_MESSAGE':
-      const { msg, user } = action;
+      return ({
+        ...state,
+        roomInfo: {
+          ...state.roomInfo,
+          [action.message.room]: {
+            ...state.roomInfo[action.message.room],
+            messages: [...state.roomInfo[action.message.room].messages, action.message]
+          }
+        }
+      })
+    case 'ADD_MESSAGES':
       return ({
         ...state,
         roomInfo: {
           ...state.roomInfo,
           [action.room]: {
             ...state.roomInfo[action.room],
-            messages: [...state.roomInfo[action.room].messages, {msg, user}]
+            messages: [...action.messages, ...state.roomInfo[action.room].messages]
           }
         }
       })
@@ -114,6 +125,32 @@ const reducer = (state = initialState, action) => {
         }
       }
     })
+    case 'SET_ROOM_LOADING':
+    return ({
+      ...state,
+      roomInfo: {
+        ...state.roomInfo,
+        [action.room]: {
+          ...state.roomInfo[action.room],
+          loading: action.isLoading
+        }
+      }
+    })
+    case 'SET_ROOM_NEW_MESSAGE':
+    if(action.room!==''){
+      return ({
+        ...state,
+        roomInfo: {
+          ...state.roomInfo,
+          [action.room]: {
+            ...state.roomInfo[action.room],
+            newMessage: action.newMessage
+          }
+        }
+      })
+    } else {
+      return state
+    }
     default:
       return state
   }

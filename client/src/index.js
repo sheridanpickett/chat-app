@@ -7,13 +7,7 @@ import reducer from './reducers';
 import App from './containers/App';
 import * as serviceWorker from './serviceWorker';
 
-
-
-
-
 const persistedState = loadState()
-
-
 
 const store = createStore(reducer, persistedState, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__({trace: true}));
 

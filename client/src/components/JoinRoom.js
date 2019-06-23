@@ -1,20 +1,19 @@
 import React from 'react';
-import styled from 'styled-components';
 import socket from '../connectSocket';
 import InputAndSubmit from './InputAndSubmit';
+import StyledJoinRoom from '../styles/JoinRoom';
 
-const StyledJoinRoom = styled.div`
-
-`
-
-const JoinRoom = ({rooms, user, addRoom, updateActiveRoom, updateRoom}) => {
+export default ({rooms, user, addRoom, updateActiveRoom, updateRoom, setRoomLoading}) => {
   const joinRoom = room => {
-    socket.emit('join room', room, user);
-    if(rooms.length<1) {
-      addRoom();
-      updateActiveRoom(0);
+    if(!rooms.includes(room) && room!==''){
+      socket.emit('join room', room, user);
+      socket.emit('get messages', room);
+      if(rooms.length<1) {
+        addRoom();
+        updateActiveRoom(0);
+      }
+      updateRoom(room);
     }
-    updateRoom(room);
   }
 
   return (
@@ -27,5 +26,3 @@ const JoinRoom = ({rooms, user, addRoom, updateActiveRoom, updateRoom}) => {
     </StyledJoinRoom>
   )
 }
-
-export default JoinRoom;

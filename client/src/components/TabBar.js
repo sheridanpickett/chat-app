@@ -1,17 +1,12 @@
 import React from 'react';
 import { generate } from 'shortid';
-import styled from 'styled-components';
+import StyledTabBar from '../styles/TabBar';
 import Tab from '../containers/Tab';
 import TabNew from '../containers/TabNew';
 
-const StyledTabBar = styled.div`
-  display: flex;
-  height: 60px;
-`
+export default ({rooms}) => {
 
-const TabBar = ({rooms}) => {
-
-  const roomTabs = rooms.map((room, index) => <Tab key={generate()}  room={room} index={index} />)
+  const roomTabs = rooms.map((room, index) => <Tab key={generate()} room={room} index={index} />)
 
   return(
     <StyledTabBar>
@@ -20,5 +15,3 @@ const TabBar = ({rooms}) => {
     </StyledTabBar>
   )
 }
-
-export default TabBar;

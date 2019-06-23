@@ -1,20 +1,22 @@
 import React from 'react';
 import socket from '../connectSocket';
+import getDateTime from '../getDateTime';
 import InputAndSubmit from './InputAndSubmit';
+import StyledSendMessage from '../styles/SendMessage';
 
-const SendMessage = ({room, user}) => {
+export default ({room, user}) => {
   const sendMessage = msg => {
-    socket.emit('chat message', room, msg, user)
+    let userName = user.name;
+    let dateTime = getDateTime();
+    socket.emit('chat message', {room, msg, userName, dateTime})
   }
   return (
-    <div>
+    <StyledSendMessage>
       <InputAndSubmit
         placeholder="Write a message.."
         buttonText="Send"
         onClick={sendMessage}
       />
-    </div>
+    </StyledSendMessage>
   )
 }
-
-export default SendMessage;

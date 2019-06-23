@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
 
-const dbString = 'mongodb+srv://sheridan:123123234@cluster0-okzqv.mongodb.net/test?retryWrites=true';
+const dbString = `mongodb+srv://sheridan:${process.env.DB_PASSWORD}@cluster0-okzqv.mongodb.net/test?retryWrites=true`;
 const connectDB = async () => {
   try {
     let db = await mongoose.connect(dbString, {

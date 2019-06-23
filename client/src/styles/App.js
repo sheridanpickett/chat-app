@@ -2,7 +2,8 @@ import styled from 'styled-components';
 
 export default styled.div`
 	display: flex;
+	position: absolute;
 	font-family: "Geneva";
-	min-height: 100vh;
+	height: 100vh;
 	min-width: 100vw;
 `

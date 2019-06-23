@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import StyledInputAndSubmit from '../styles/InputAndSubmit';
 
-const InputAndSubmit = ({placeholder, buttonText, onClick}) => {
+export default ({placeholder, buttonText, onClick}) => {
   const [value, setValue] = useState('');
 
   const submitFunction = e => {
@@ -21,5 +21,3 @@ const InputAndSubmit = ({placeholder, buttonText, onClick}) => {
     </StyledInputAndSubmit>
   )
 }
-
-export default InputAndSubmit;
